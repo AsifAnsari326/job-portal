@@ -1,1 +1,60 @@
-<p>signup works!</p>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__logo">
+      <div class="auth-card__logo-icon">
+        <i class="bi bi-briefcase-fill"></i>
+      </div>
+      <span class="auth-card__logo-text">Hyre</span>
+    </div>
+
+    <h1 class="auth-card__title">Create your account</h1>
+    <p class="auth-card__subtitle">Start applying to roles in minutes.</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label class="form-label" for="fullName">Full name</label>
+        <input id="fullName" type="text" class="form-input" formControlName="fullName"
+               [class.form-input--invalid]="fullName?.invalid && fullName?.touched" />
+        @if (fullName?.errors?.['required'] && fullName?.touched) {
+          <span class="form-error">Full name is required.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input id="email" type="email" class="form-input" formControlName="email"
+               [class.form-input--invalid]="email?.invalid && email?.touched" />
+        @if (email?.errors?.['required'] && email?.touched) {
+          <span class="form-error">Email is required.</span>
+        }
+        @if (email?.errors?.['email'] && email?.touched) {
+          <span class="form-error">Enter a valid email.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input id="password" type="password" class="form-input" formControlName="password"
+               [class.form-input--invalid]="password?.invalid && password?.touched" />
+        @if (password?.errors?.['minlength'] && password?.touched) {
+          <span class="form-error">Password must be at least 6 characters.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" type="password" class="form-input" formControlName="confirmPassword"
+               [class.form-input--invalid]="signupForm.errors?.['passwordMismatch'] && confirmPassword?.touched" />
+        @if (signupForm.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+          <span class="form-error">Passwords don't match.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--full" [disabled]="signupForm.invalid">Sign up</button>
+    </form>
+
+    <p class="auth-card__footer">
+      Already have an account? <a routerLink="/login" class="auth-card__link">Log in</a>
+    </p>
+  </div>
+</div>
