@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { Auth } from '../../../core/services/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { RouterLink } from '@angular/router';
 export class Login {
   loginForm!: any;
 
-  constructor(private fb :FormBuilder) {}
+  constructor(private fb :FormBuilder, private authService: Auth, private router: Router) {}
   
   ngOnInit() {
   this.loginForm! = this.fb.group({
@@ -34,5 +35,10 @@ export class Login {
     return;
  }
  console.log('login form value', this.loginForm.value);
+   const { email, password } = this.loginForm.value;
+  this.authService.login(email!, password!).subscribe({
+    next: (res) => console.log('Auth successful:', res),
+    error: (err) => console.error('Login failed', err)
+  });
 };
 };

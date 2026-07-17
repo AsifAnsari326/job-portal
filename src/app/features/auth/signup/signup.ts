@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../../core/services/auth'; 
+
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -17,7 +19,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 export class Signup {
   signupForm!: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: Router, private authService: Auth) {}
 
 
   ngOnInit() {
@@ -40,5 +42,10 @@ export class Signup {
       return;
     }
     console.log('Signup form value:', this.signupForm.value);
+    const { fullName, email, password } = this.signupForm.value;
+  this.authService.signup(fullName!, email!, password!).subscribe({
+    next: (res) => console.log('Auth successful:', res),
+    error: (err) => console.error('Signup failed', err)
+  });
   }
 }

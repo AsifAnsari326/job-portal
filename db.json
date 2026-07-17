@@ -1,8 +1,38 @@
 {
   "jobs": [
-    { "id": 1, "title": "Frontend Developer", "company": "Nimbus Retail", "location": "Bengaluru", "type": "Full-time", "tags": ["Angular", "RxJS", "TypeScript"] }
+    {
+      "id": 1,
+      "title": "Frontend Developer",
+      "company": "Nimbus Retail",
+      "location": "Bengaluru",
+      "type": "Full-time",
+      "tags": [
+        "Angular",
+        "RxJS",
+        "TypeScript"
+      ]
+    }
   ],
-  "users": [],
+  "users": [
+    {
+      "id": 1784253432984,
+      "fullName": "Asif1",
+      "email": "test@test1.com",
+      "password": "$2b$08$SxS0i8MdRWbEnZijbdMU.ehtdVRQIUMIPeX.EXL4M1ggV5Ya7iO2q"
+    },
+    {
+      "id": 1784253636788,
+      "fullName": "Asif2",
+      "email": "test@test2.com",
+      "password": "$2b$08$i0M/Z3WhjkKZBVYRfFHXre7/ZnmhzVqx5wNYRrme5l2CvT6y0bto6"
+    },
+    {
+      "id": 1784253950774,
+      "fullName": "Asif3",
+      "email": "test@test3.com",
+      "password": "$2b$08$xRsvB8jWzH2Eo7lsnKIegu/o6/3wzQ7QvyfYZsgRF/jGZp4cqf7XC"
+    }
+  ],
   "savedJobs": [],
   "applications": []
 }
