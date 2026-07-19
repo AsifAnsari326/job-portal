@@ -1,0 +1,28 @@
+<div class="jobs-page">
+  <div class="jobs-page__list">
+    @if (loading()) {
+      <p>Loading jobs...</p>
+    }
+    @if (error()) {
+      <p>Something went wrong. Please try again.</p>
+    }
+    @for (job of jobs(); track job.id) {
+
+      <div class="job-card">
+        <div class="job-card__avatar">{{ job.company.charAt(0) }}</div>
+        <div class="job-card__content">
+          <div class="job-card__header">
+            <p class="job-card__title">{{ job.title }}</p>
+            <i class="bi bi-bookmark"></i>
+          </div>
+          <p class="job-card__meta">{{ job.company }} &middot; {{ job.location }} &middot; {{ job.type }}</p>
+          <div class="job-card__tags">
+            @for (tag of job.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
