@@ -91,11 +91,14 @@
     height: 40px;
     cursor: pointer;
     color: $color-text-secondary;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: all 0.15s ease;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: $color-primary;
       border-color: $color-primary;
+      transform: translateY(-1px);
+      outline: none;
     }
   }
 
@@ -139,6 +142,86 @@
     display: flex;
     gap: 12px;
     margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  &__confirmation {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15, 110, 86, 0.1);
+    color: $color-primary;
+    font-weight: 600;
+  }
+
+  &__feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    width: fit-content;
+
+    &--success {
+      background: rgba(15, 110, 86, 0.1);
+      color: $color-primary;
+    }
+
+    &--error {
+      background: rgba(220, 38, 38, 0.1);
+      color: #b91c1c;
+    }
+
+    &--info {
+      background: rgba(37, 99, 235, 0.1);
+      color: #1d4ed8;
+    }
+  }
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(15, 110, 86, 0.03);
+  border: 1px solid $color-border;
+  border-radius: 16px;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: $color-text-primary;
+    font-weight: 600;
+
+    input,
+    textarea {
+      border: 1px solid $color-border;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fff;
+      color: $color-text-primary;
+      resize: vertical;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.12);
+      }
+    }
+  }
+
+  &__error {
+    margin: -4px 0 0;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 500;
   }
 }
 
@@ -173,6 +256,13 @@
     color: #fff;
     border-color: transparent;
     box-shadow: 0 10px 20px rgba(15, 110, 86, 0.16);
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
   }
 
   &--secondary {

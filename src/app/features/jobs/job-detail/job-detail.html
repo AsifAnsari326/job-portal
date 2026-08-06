@@ -1,10 +1,5 @@
 <div class="job-detail-page">
-  <nav class="navbar">
-    <a class="navbar__brand" routerLink="/jobs">
-      <div class="navbar__logo"><i class="bi bi-arrow-left"></i></div>
-      <span>Back to jobs</span>
-    </a>
-  </nav>
+  <app-header></app-header>
 
   @if (loading()) {
     <div class="detail-card">
@@ -51,9 +46,49 @@
       </div>
 
       <div class="detail-card__actions">
-        <button class="btn btn--primary" type="button">Apply now</button>
+        @if (!submitted() && !hasApplied()) {
+          <button class="btn btn--primary" type="button" (click)="openApply()">Apply now</button>
+        } @else {
+          <div class="detail-card__confirmation">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ hasApplied() ? 'You have already applied to this role.' : 'Your application has been submitted.' }}</span>
+          </div>
+        }
         <a class="btn btn--secondary" routerLink="/jobs">Back to listing</a>
       </div>
+
+      @if (feedbackMessage()) {
+        <div class="detail-card__feedback" [class.detail-card__feedback--success]="feedbackType() === 'success'" [class.detail-card__feedback--error]="feedbackType() === 'error'" [class.detail-card__feedback--info]="feedbackType() === 'info'">
+          <i class="bi" [class.bi-check-circle-fill]="feedbackType() === 'success'" [class.bi-exclamation-circle-fill]="feedbackType() === 'error'" [class.bi-info-circle-fill]="feedbackType() === 'info'"></i>
+          <span>{{ feedbackMessage() }}</span>
+        </div>
+      }
+
+      @if (showForm()) {
+        <form class="apply-form" [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
+          <label class="apply-form__field">
+            <span>Resume link</span>
+            <input formControlName="resumeLink" type="url" placeholder="https://..." />
+          </label>
+          @if (applicationForm.get('resumeLink')?.touched && applicationForm.get('resumeLink')?.hasError('required')) {
+            <p class="apply-form__error">Please add a resume link.</p>
+          }
+          @if (applicationForm.get('resumeLink')?.touched && applicationForm.get('resumeLink')?.hasError('pattern')) {
+            <p class="apply-form__error">The link must start with http:// or https://.</p>
+          }
+          <label class="apply-form__field">
+            <span>Cover note</span>
+            <textarea formControlName="coverNote" rows="4" placeholder="Tell us why this role fits you."></textarea>
+          </label>
+          @if (applicationForm.get('coverNote')?.touched && applicationForm.get('coverNote')?.hasError('required')) {
+            <p class="apply-form__error">Please write a short cover note.</p>
+          }
+          @if (applicationForm.get('coverNote')?.touched && applicationForm.get('coverNote')?.hasError('minlength')) {
+            <p class="apply-form__error">Cover notes should be at least 20 characters long.</p>
+          }
+          <button class="btn btn--primary" type="submit">Submit application</button>
+        </form>
+      }
     </article>
   }
 </div>

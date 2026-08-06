@@ -45,7 +45,7 @@ export class Signup {
     const { fullName, email, password } = this.signupForm.value;
     this.authService.signup(fullName!, email!, password!).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/jobs']);
       },
       error: (err) => console.error('Signup failed', err),
     });

@@ -39,7 +39,7 @@ export class Login {
     const { email, password } = this.loginForm.value;
     this.authService.login(email!, password!).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/jobs']);
       },
       error: (err) => console.error('Login failed', err),
     });

@@ -8,10 +8,12 @@ export class JobService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3001/jobs';
 
-  getJobs(searchTerm: string = '', type: string = ''): Observable<Job[]> {
+  getJobs(searchTerm: string = '', type: string = '', page: number = 1, limit: number = 6): Observable<Job[]> {
     let params = new HttpParams();
     if (searchTerm) params = params.set('q', searchTerm);
     if (type) params = params.set('type', type);
+    params = params.set('_page', page.toString());
+    params = params.set('_limit', limit.toString());
     return this.http.get<Job[]>(this.apiUrl, { params });
   }
 

@@ -1,23 +1,12 @@
 <div class="dashboard-page">
-  <nav class="navbar">
-    <a routerLink="/dashboard" class="navbar__brand">
-      <div class="navbar__logo"><i class="bi bi-briefcase-fill"></i></div>
-      <span>Hyre</span>
-    </a>
-    <div class="navbar__spacer"></div>
-    <div class="navbar__links">
-      <a class="navbar__link" routerLink="/jobs">Find jobs</a>
-      <a class="navbar__link" routerLink="/companies">Companies</a>
-      <a class="navbar__link navbar__link--active" routerLink="/dashboard">Dashboard</a>
-    </div>
-  </nav>
+  <app-header></app-header>
 
   <div class="dashboard-container">
-    <!-- Welcome Header -->
     <section class="welcome-section">
       <div class="welcome-section__content">
-        <h1 class="welcome-section__title">Welcome back, {{ userName() }}! 👋</h1>
-        <p class="welcome-section__subtitle">Keep track of your job search journey</p>
+        <p class="welcome-section__eyebrow">Your workspace</p>
+        <h1 class="welcome-section__title">Welcome back, {{ userName() }}.</h1>
+        <p class="welcome-section__subtitle">Keep track of the roles you saved and the applications you submitted.</p>
       </div>
       <a routerLink="/jobs" class="welcome-section__cta">
         <i class="bi bi-search"></i>
@@ -25,7 +14,6 @@
       </a>
     </section>
 
-    <!-- Stats Cards -->
     <section class="stats-section">
       <div class="stat-card stat-card--primary">
         <div class="stat-card__icon"><i class="bi bi-bookmark-fill"></i></div>
@@ -33,7 +21,7 @@
           <p class="stat-card__label">Saved Jobs</p>
           <p class="stat-card__value">{{ savedJobsCount() }}</p>
         </div>
-        <a routerLink="/saved-jobs" class="stat-card__link">View All →</a>
+        <button class="stat-card__link" type="button" (click)="setTab('saved')">View saved →</button>
       </div>
 
       <div class="stat-card stat-card--secondary">
@@ -42,99 +30,85 @@
           <p class="stat-card__label">Applications</p>
           <p class="stat-card__value">{{ appliedJobsCount() }}</p>
         </div>
-        <a routerLink="/applications" class="stat-card__link">View All →</a>
-      </div>
-
-      <div class="stat-card stat-card--tertiary">
-        <div class="stat-card__icon"><i class="bi bi-building"></i></div>
-        <div class="stat-card__content">
-          <p class="stat-card__label">Companies</p>
-          <p class="stat-card__value">20+</p>
-        </div>
-        <a routerLink="/companies" class="stat-card__link">Explore →</a>
+        <button class="stat-card__link" type="button" (click)="setTab('applications')">View applications →</button>
       </div>
     </section>
 
-    <!-- Quick Actions -->
-    <section class="quick-actions">
-      <h2 class="quick-actions__title">Quick Actions</h2>
-      <div class="quick-actions__grid">
-        <a routerLink="/jobs" class="action-btn action-btn--search">
-          <i class="bi bi-search"></i>
-          <span>Search Jobs</span>
-        </a>
-        <a routerLink="/saved-jobs" class="action-btn action-btn--saved">
-          <i class="bi bi-bookmark-fill"></i>
-          <span>My Saved Jobs</span>
-        </a>
-        <a routerLink="/applications" class="action-btn action-btn--apply">
-          <i class="bi bi-file-earmark-check"></i>
-          <span>My Applications</span>
-        </a>
-        <a routerLink="/companies" class="action-btn action-btn--companies">
-          <i class="bi bi-building"></i>
-          <span>Browse Companies</span>
-        </a>
-      </div>
+    <section class="tabs" aria-label="Dashboard sections">
+      <button class="tabs__tab" [class.tabs__tab--active]="activeTab() === 'saved'" type="button" (click)="setTab('saved')">
+        <i class="bi bi-bookmark-fill"></i>
+        Saved Jobs
+      </button>
+      <button class="tabs__tab" [class.tabs__tab--active]="activeTab() === 'applications'" type="button" (click)="setTab('applications')">
+        <i class="bi bi-file-earmark-check"></i>
+        Applied Jobs
+      </button>
     </section>
 
-    <!-- Recent Saved Jobs -->
-    @if (recentSavedJobs().length > 0) {
-    <section class="recent-section">
-      <div class="recent-section__header">
-        <h2 class="recent-section__title">Recently Saved Jobs</h2>
-        <a routerLink="/saved-jobs" class="recent-section__link">View All</a>
-      </div>
-
+    @if (activeTab() === 'saved') {
       @if (loading()) {
-      <div class="loading-state">
-        <p>Loading your saved jobs...</p>
-      </div>
-      } @else {
-      <div class="jobs-carousel">
-        @for (job of recentSavedJobs(); track job.id) {
-        <div class="job-preview">
-          <div class="job-preview__header">
-            <h3 class="job-preview__title">{{ job.title }}</h3>
-            <button
-              class="job-preview__bookmark"
-              [class.job-preview__bookmark--saved]="isSaved(job.id)"
-              (click)="toggleSave(job.id)"
-            >
-              <i class="bi bi-bookmark-fill"></i>
-            </button>
-          </div>
-
-          <p class="job-preview__company">{{ job.company }}</p>
-
-          <div class="job-preview__meta">
-            <span class="job-preview__badge">{{ job.type }}</span>
-            <span class="job-preview__badge">{{ job.experience }}</span>
-          </div>
-
-          <p class="job-preview__salary">{{ job.salary }}</p>
-
-          <a [routerLink]="['/jobs', job.id]" class="job-preview__link">View Details →</a>
+        <div class="state-card">
+          <i class="bi bi-hourglass-split"></i>
+          <h2>Loading your saved roles…</h2>
+          <p>We’re pulling the latest details for your bookmarks.</p>
         </div>
-        }
-      </div>
+      } @else if (savedJobs().length === 0) {
+        <div class="state-card">
+          <i class="bi bi-bookmark"></i>
+          <h2>You haven't saved any jobs yet</h2>
+          <p>Bookmark a role from the listings to keep it close at hand.</p>
+          <a routerLink="/jobs" class="btn btn--primary">Browse jobs</a>
+        </div>
+      } @else {
+        <div class="jobs-grid">
+          @for (job of savedJobs(); track job.id) {
+            <article class="job-preview">
+              <div class="job-preview__header">
+                <div>
+                  <h3 class="job-preview__title">{{ job.title }}</h3>
+                  <p class="job-preview__company">{{ job.company }}</p>
+                </div>
+                <button class="job-preview__bookmark" type="button" [class.job-preview__bookmark--saved]="isSaved(job.id)" (click)="toggleSave(job.id)">
+                  <i class="bi bi-bookmark-fill"></i>
+                </button>
+              </div>
+              <div class="job-preview__meta">
+                <span class="job-preview__badge">{{ job.type }}</span>
+                <span class="job-preview__badge">{{ job.experience }}</span>
+              </div>
+              <p class="job-preview__salary">{{ job.salary }}</p>
+              <a [routerLink]="['/jobs', job.id]" class="job-preview__link">View details →</a>
+            </article>
+          }
+        </div>
       }
-    </section>
-    }
-
-    <!-- Empty State -->
-    @if (recentSavedJobs().length === 0 && !loading()) {
-    <section class="empty-dashboard">
-      <div class="empty-dashboard__content">
-        <i class="bi bi-inbox"></i>
-        <h2>Start Your Job Search</h2>
-        <p>Explore available positions and save jobs you're interested in!</p>
-        <a routerLink="/jobs" class="btn btn--primary">
-          <i class="bi bi-search"></i>
-          Browse Jobs Now
-        </a>
-      </div>
-    </section>
+    } @else {
+      @if (applicationsLoading()) {
+        <div class="state-card">
+          <i class="bi bi-arrow-repeat"></i>
+          <h2>Loading your applications…</h2>
+          <p>We’re fetching your recent submissions.</p>
+        </div>
+      } @else if (appliedJobs().length === 0) {
+        <div class="state-card">
+          <i class="bi bi-file-earmark-check"></i>
+          <h2>You haven't applied to any jobs yet</h2>
+          <p>Apply to a role from its detail page and it will show up here.</p>
+          <a routerLink="/jobs" class="btn btn--primary">Explore jobs</a>
+        </div>
+      } @else {
+        <div class="applications-list">
+          @for (item of appliedJobs(); track item.application.id) {
+            <a class="application-card" [routerLink]="['/jobs', item.job.id]">
+              <div>
+                <h3 class="application-card__title">{{ item.job.title }}</h3>
+                <p class="application-card__meta">{{ item.job.company }} · Applied {{ item.application.appliedDate }}</p>
+              </div>
+              <span class="application-card__status">Applied</span>
+            </a>
+          }
+        </div>
+      }
     }
   </div>
 </div>

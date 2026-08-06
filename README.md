@@ -1,59 +1,121 @@
-# JobPortal
+# Hyre Job Portal
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.1.
+Hyre is a modern job portal web application built with Angular 22 and a mock backend, designed to showcase a complete job search and application experience for job seekers.
 
-## Development server
+It includes authentication, job discovery, saved jobs, job applications, and a dashboard — all wrapped in a polished, responsive UI that is suitable for a portfolio or resume project.
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
+- User authentication with login and signup flows
+- Job listings with search and filtering
+- Pagination for browsing more jobs
+- Job detail page with full role information
+- Save jobs to a personal shortlist
+- Apply to jobs with a submission form
+- Dashboard to view saved jobs and applications
+- Responsive layout for desktop and mobile screens
+
+## Tech Stack
+
+- Angular 22
+- TypeScript
+- RxJS
+- Bootstrap 5 and Bootstrap Icons
+- Express + JSON Server for mock API data
+- SCSS for styling
+
+## Project Structure
+
+```text
+src/
+  app/
+    core/            # services, guards, models, interceptors
+    features/        # auth, jobs, companies, dashboard, saved jobs
+    shared/          # reusable UI components
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting Started
 
-## Code scaffolding
+### Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Make sure you have the following installed:
+
+- Node.js (v18 or newer recommended)
+- npm
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-username/hyre-job-portal.git
+   cd hyre-job-portal
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Start the mock API server
+   ```bash
+   npm run api
+   ```
+
+4. Start the Angular app
+   ```bash
+   npm start
+   ```
+
+5. Open your browser and visit
+   ```text
+   http://localhost:4200
+   ```
+
+## Available Scripts
 
 ```bash
-ng generate component component-name
+npm start        # start the Angular development server
+npm run build    # build the app for production
+npm run api      # start the local JSON mock backend
+npm test         # run unit tests
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Deployment
+
+This app is ready to be deployed to platforms such as:
+
+- Vercel
+- Netlify
+- Firebase Hosting
+- GitHub Pages
+
+For a production deployment, build the app with:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+Then deploy the contents of the dist folder to your hosting provider.
 
-To build the project run:
+## Screenshots
 
-```bash
-ng build
+You can add screenshots here once you have them ready for the repo:
+
+```text
+![Homepage](./public/screenshots/home.png)
+![Dashboard](./public/screenshots/dashboard.png)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Notes
 
-## Running unit tests
+This project is designed as a polished frontend portfolio project and can be extended with:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+- real backend integration
+- role-based access control
+- email notifications
+- advanced analytics and filters
 
-```bash
-ng test
-```
+## License
 
-## Running end-to-end tests
+This project is open-source and available under the MIT License.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

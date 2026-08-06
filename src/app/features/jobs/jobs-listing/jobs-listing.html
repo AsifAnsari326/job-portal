@@ -1,26 +1,5 @@
 <div class="jobs-page">
-  <nav class="navbar">
-    <a routerLink="/dashboard" class="navbar__brand">
-      <div class="navbar__logo"><i class="bi bi-briefcase-fill"></i></div>
-      <span>Hyre</span>
-    </a>
-
-    <div class="navbar__search">
-      <i class="bi bi-search"></i>
-      <input
-        type="text"
-        placeholder="Job title, skill, or company"
-        (input)="onSearchChange($any($event.target).value)"
-      />
-    </div>
-
-    <div class="navbar__links">
-      <a class="navbar__link navbar__link--active" routerLink="/jobs">Find jobs</a>
-      <a class="navbar__link" routerLink="/companies">Companies</a>
-      <a class="navbar__link" routerLink="/dashboard">Saved</a>
-      <a class="navbar__link" routerLink="/dashboard">Applications</a>
-    </div>
-  </nav>
+  <app-header></app-header>
 
   <header class="hero">
     <h1 class="hero__title">Find your next role</h1>
@@ -85,6 +64,15 @@
     </aside>
 
     <div class="jobs-list">
+      <div class="jobs-list__toolbar">
+        <input
+          class="jobs-list__search"
+          type="text"
+          placeholder="Search roles or companies"
+          (input)="onSearchChange($any($event.target).value)"
+        />
+      </div>
+
       @if (loading()) {
         @for (i of [1,2,3]; track i) {
           <div class="job-card job-card--skeleton">
@@ -125,6 +113,12 @@
               </div>
             </div>
           </div>
+        }
+
+        @if (hasMore()) {
+          <button class="load-more" type="button" (click)="loadMore()">Load more</button>
+        } @else if (jobs().length > 0) {
+          <p class="jobs-list__end">You’ve reached the end of the list.</p>
         }
       }
     </div>
