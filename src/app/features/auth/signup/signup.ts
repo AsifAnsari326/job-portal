@@ -41,11 +41,13 @@ export class Signup {
       this.signupForm.markAllAsTouched();
       return;
     }
-    console.log('Signup form value:', this.signupForm.value);
+
     const { fullName, email, password } = this.signupForm.value;
-  this.authService.signup(fullName!, email!, password!).subscribe({
-    next: (res) => console.log('Auth successful:', res),
-    error: (err) => console.error('Signup failed', err)
-  });
+    this.authService.signup(fullName!, email!, password!).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => console.error('Signup failed', err),
+    });
   }
 }

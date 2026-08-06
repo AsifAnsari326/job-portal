@@ -1,0 +1,140 @@
+<div class="companies-page">
+  <nav class="navbar">
+    <div class="navbar__brand" (click)="navigateToDashboard()">
+      <div class="navbar__logo"><i class="bi bi-briefcase-fill"></i></div>
+      <span>Hyre</span>
+    </div>
+    <div class="navbar__spacer"></div>
+    <div class="navbar__links">
+      <a class="navbar__link" routerLink="/jobs">Find jobs</a>
+      <a class="navbar__link navbar__link--active">Companies</a>
+      <a class="navbar__link" routerLink="/dashboard">Saved</a>
+    </div>
+    <div class="authentication">
+      <div class="authentication__avatar">A</div>
+      <span class="authentication__name">Alice</span>
+      <div class="authentication__dropdown">
+        <a class="authentication__dropdown-item" routerLink="/profile">Profile</a>
+        <a class="authentication__dropdown-item" routerLink="/settings">Settings</a>
+        <a class="authentication__dropdown-item" routerLink="/logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="companies-container">
+    @if (!selectedCompany()) {
+    <div class="companies-header">
+      <h1 class="companies-header__title">Browse Companies</h1>
+      <p class="companies-header__subtitle">Explore opportunities at leading companies</p>
+    </div>
+
+    @if (loading()) {
+    <div class="loading-state">
+      <p>Loading companies...</p>
+    </div>
+    } @else if (error()) {
+    <div class="error-state">
+      <p>Failed to load companies. Please try again.</p>
+    </div>
+    } @else if (companies().length === 0) {
+    <div class="empty-state">
+      <p>No companies found.</p>
+    </div>
+    } @else {
+    <div class="companies-grid">
+      @for (company of companies(); track company.id) {
+      <div class="company-card" (click)="selectCompany(company)">
+        <div class="company-card__header">
+          <div class="company-card__avatar">
+            {{ company.name.charAt(0).toUpperCase() }}
+          </div>
+          <div class="company-card__info">
+            <h3 class="company-card__name">{{ company.name }}</h3>
+            <p class="company-card__location">
+              <i class="bi bi-geo-alt"></i> {{ company.location }}
+            </p>
+          </div>
+        </div>
+
+        <p class="company-card__description">{{ company.description }}</p>
+
+        <div class="company-card__footer">
+          <span class="company-card__job-count">{{ company.jobCount || 0 }} open positions</span>
+          <button class="company-card__button">View Jobs →</button>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    } @else {
+    <div class="company-detail">
+      <button class="company-detail__back" (click)="clearSelection()">
+        <i class="bi bi-chevron-left"></i> Back to Companies
+      </button>
+
+      <div class="company-detail__header">
+        <div class="company-detail__avatar">
+          {{ selectedCompany()!.name.charAt(0).toUpperCase() }}
+        </div>
+        <div class="company-detail__info">
+          <h1 class="company-detail__name">{{ selectedCompany()!.name }}</h1>
+          <p class="company-detail__location">
+            <i class="bi bi-geo-alt"></i> {{ selectedCompany()!.location }}
+          </p>
+        </div>
+      </div>
+
+      <p class="company-detail__description">{{ selectedCompany()!.description }}</p>
+
+      <div class="company-detail__jobs">
+        <h2 class="company-detail__jobs-title">Open Positions</h2>
+
+        @if (loading()) {
+        <div class="loading-state">
+          <p>Loading jobs...</p>
+        </div>
+        } @else if (companyJobs().length === 0) {
+        <div class="empty-state">
+          <p>No jobs available at this company right now.</p>
+        </div>
+        } @else {
+        <div class="jobs-list">
+          @for (job of companyJobs(); track job.id) {
+          <div class="job-item">
+            <div class="job-item__header">
+              <div class="job-item__info">
+                <h3 class="job-item__title">{{ job.title }}</h3>
+                <div class="job-item__meta">
+                  <span class="job-item__badge">{{ job.type }}</span>
+                  <span class="job-item__badge">{{ job.experience }}</span>
+                  <span class="job-item__badge">{{ job.salary }}</span>
+                </div>
+              </div>
+              <button
+                class="job-item__bookmark"
+                [class.job-item__bookmark--saved]="isSaved(job.id)"
+                (click)="toggleSave(job.id)"
+              >
+                <i class="bi bi-bookmark-fill"></i>
+              </button>
+            </div>
+
+            <p class="job-item__description">{{ job.description }}</p>
+
+            <div class="job-item__footer">
+              <div class="job-item__tags">
+                @for (tag of job.tags; track tag) {
+                <span class="job-item__tag">{{ tag }}</span>
+                }
+              </div>
+              <a [routerLink]="['/jobs', job.id]" class="job-item__link">View Details →</a>
+            </div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>

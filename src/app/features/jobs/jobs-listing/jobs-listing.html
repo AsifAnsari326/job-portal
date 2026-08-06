@@ -1,28 +1,132 @@
 <div class="jobs-page">
-  <div class="jobs-page__list">
-    @if (loading()) {
-      <p>Loading jobs...</p>
-    }
-    @if (error()) {
-      <p>Something went wrong. Please try again.</p>
-    }
-    @for (job of jobs(); track job.id) {
+  <nav class="navbar">
+    <a routerLink="/dashboard" class="navbar__brand">
+      <div class="navbar__logo"><i class="bi bi-briefcase-fill"></i></div>
+      <span>Hyre</span>
+    </a>
 
-      <div class="job-card">
-        <div class="job-card__avatar">{{ job.company.charAt(0) }}</div>
-        <div class="job-card__content">
-          <div class="job-card__header">
-            <p class="job-card__title">{{ job.title }}</p>
-            <i class="bi bi-bookmark"></i>
-          </div>
-          <p class="job-card__meta">{{ job.company }} &middot; {{ job.location }} &middot; {{ job.type }}</p>
-          <div class="job-card__tags">
-            @for (tag of job.tags; track tag) {
-              <span class="tag">{{ tag }}</span>
-            }
-          </div>
+    <div class="navbar__search">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        placeholder="Job title, skill, or company"
+        (input)="onSearchChange($any($event.target).value)"
+      />
+    </div>
+
+    <div class="navbar__links">
+      <a class="navbar__link navbar__link--active" routerLink="/jobs">Find jobs</a>
+      <a class="navbar__link" routerLink="/companies">Companies</a>
+      <a class="navbar__link" routerLink="/dashboard">Saved</a>
+      <a class="navbar__link" routerLink="/dashboard">Applications</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1 class="hero__title">Find your next role</h1>
+    <p class="hero__subtitle">{{ jobs().length }} open positions available</p>
+  </header>
+
+  <div class="jobs-layout">
+    <aside class="filters">
+      <div class="filters__group">
+        <p class="filters__label">Job Type</p>
+        <select (change)="onTypeChange($any($event.target).value)" class="filters__select">
+          <option value="">All types</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Remote">Remote</option>
+          <option value="Internship">Internship</option>
+        </select>
+      </div>
+
+      <div class="filters__divider"></div>
+
+      <div class="filters__group">
+        <p class="filters__label">Experience</p>
+        <div class="filters__checkboxes">
+          <label class="filters__checkbox">
+            <input
+              type="checkbox"
+              value="0-1"
+              (change)="onExperienceChange($any($event.target).value, $any($event.target).checked)"
+            />
+            <span>0-1 years</span>
+          </label>
+          <label class="filters__checkbox">
+            <input
+              type="checkbox"
+              value="1-3"
+              (change)="onExperienceChange($any($event.target).value, $any($event.target).checked)"
+            />
+            <span>1-3 years</span>
+          </label>
+          <label class="filters__checkbox">
+            <input
+              type="checkbox"
+              value="3-5"
+              (change)="onExperienceChange($any($event.target).value, $any($event.target).checked)"
+            />
+            <span>3-5 years</span>
+          </label>
+          <label class="filters__checkbox">
+            <input
+              type="checkbox"
+              value="5+"
+              (change)="onExperienceChange($any($event.target).value, $any($event.target).checked)"
+            />
+            <span>5+ years</span>
+          </label>
         </div>
       </div>
-    }
+
+      <div class="filters__divider"></div>
+
+      <button class="filters__reset" (click)="onClearFilters()">Clear filters</button>
+    </aside>
+
+    <div class="jobs-list">
+      @if (loading()) {
+        @for (i of [1,2,3]; track i) {
+          <div class="job-card job-card--skeleton">
+            <div class="skeleton skeleton--avatar"></div>
+            <div class="job-card__content">
+              <div class="skeleton skeleton--line" style="width: 60%"></div>
+              <div class="skeleton skeleton--line" style="width: 40%"></div>
+            </div>
+          </div>
+        }
+      } @else if (error()) {
+        <div class="state-message">
+          <p>Something went wrong loading jobs.</p>
+          <button (click)="onSearchChange(searchTerm())">Retry</button>
+        </div>
+      } @else if (jobs().length === 0) {
+        <div class="state-message">
+          <p>No jobs match your search. Try different keywords or filters.</p>
+        </div>
+      } @else {
+        @for (job of jobs(); track job.id) {
+          <div class="job-card">
+            <div class="job-card__avatar">{{ job.company.charAt(0) }}</div>
+            <div class="job-card__content">
+              <div class="job-card__header">
+                <a class="job-card__title-link" [routerLink]="['/jobs', job.id]">
+                  <p class="job-card__title">{{ job.title }}</p>
+                </a>
+                <button class="job-card__bookmark" type="button" (click)="toggleSave(job.id)">
+                  <i class="bi" [class.bi-bookmark-fill]="isSaved(job.id)" [class.bi-bookmark]="!isSaved(job.id)"></i>
+                </button>
+              </div>
+              <p class="job-card__meta">{{ job.company }} &middot; {{ job.location }} &middot; {{ job.type }}</p>
+              <div class="job-card__tags">
+                @for (tag of job.tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
   </div>
 </div>

@@ -1,0 +1,59 @@
+<div class="job-detail-page">
+  <nav class="navbar">
+    <a class="navbar__brand" routerLink="/jobs">
+      <div class="navbar__logo"><i class="bi bi-arrow-left"></i></div>
+      <span>Back to jobs</span>
+    </a>
+  </nav>
+
+  @if (loading()) {
+    <div class="detail-card">
+      <div class="skeleton skeleton--line"></div>
+      <div class="skeleton skeleton--line" style="width: 45%"></div>
+      <div class="skeleton skeleton--line" style="width: 70%"></div>
+    </div>
+  } @else if (error() || !job()) {
+    <div class="state-message">
+      <p>We could not find that job right now.</p>
+      <a class="state-message__link" routerLink="/jobs">Browse other roles</a>
+    </div>
+  } @else {
+    <article class="detail-card">
+      <div class="detail-card__header">
+        <div>
+          <p class="detail-card__eyebrow">{{ job()?.type }}</p>
+          <h1 class="detail-card__title">{{ job()?.title }}</h1>
+          <p class="detail-card__meta">{{ job()?.company }} &middot; {{ job()?.location }}</p>
+        </div>
+        <button class="detail-card__bookmark" type="button" (click)="toggleSave(job()?.id)">
+          <i class="bi" [class.bi-bookmark-fill]="isSaved(job()?.id)" [class.bi-bookmark]="!isSaved(job()?.id)"></i>
+        </button>
+      </div>
+
+      <div class="detail-card__summary">
+        <div class="detail-card__pill">Experience: {{ job()?.experience }}</div>
+        <div class="detail-card__pill">Salary: {{ job()?.salary }}</div>
+        <div class="detail-card__pill">Posted: {{ job()?.postedDate }}</div>
+      </div>
+
+      <div class="detail-card__section">
+        <h2>About the role</h2>
+        <p>{{ job()?.description }}</p>
+      </div>
+
+      <div class="detail-card__section">
+        <h2>Skills</h2>
+        <div class="detail-card__tags">
+          @for (tag of job()?.tags; track tag) {
+            <span class="tag">{{ tag }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-card__actions">
+        <button class="btn btn--primary" type="button">Apply now</button>
+        <a class="btn btn--secondary" routerLink="/jobs">Back to listing</a>
+      </div>
+    </article>
+  }
+</div>

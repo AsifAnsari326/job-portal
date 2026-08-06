@@ -1,69 +1,387 @@
 @import '../../../../styles/variables';
 
 .jobs-page {
-  padding: 24px;
-  max-width: 720px;
-  margin: 0 auto;
+  min-height: 100vh;
+  background: $color-bg-page;
+}
 
-  &__list {
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 28px;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid $color-border;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    text-decoration: none;
+    color: $color-primary;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    border-radius: 8px;
+    padding: 4px 8px;
+
+    &:hover {
+      transform: scale(1.05);
+      color: $color-primary-dark;
+      background: rgba(15, 110, 86, 0.05);
+    }
+  }
+
+  &__logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  &__search {
+    position: relative;
+    flex: 0 1 320px;
+
+    i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $color-text-secondary;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      height: 40px;
+      padding-left: 36px;
+      border: 1px solid $color-border;
+      border-radius: 12px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.9);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.12);
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $color-text-secondary;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    position: relative;
+    padding-bottom: 2px;
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &--active {
+      color: $color-primary;
+      font-weight: 600;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: $color-primary;
+        border-radius: 1px;
+      }
+    }
+  }
+}
+
+.hero {
+  padding: 32px 28px;
+  background: linear-gradient(140deg, rgba(15, 110, 86, 0.05), rgba(255, 255, 255, 0.8));
+  border-bottom: 1px solid $color-border;
+  text-align: center;
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}
+
+.jobs-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 28px 40px;
+}
+
+.filters {
+  align-self: start;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(15, 110, 86, 0.05);
+  position: sticky;
+  top: 80px;
+
+  &__group {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 700;
+    color: $color-text-secondary;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid $color-border;
+    border-radius: 10px;
+    padding: 0 10px;
+    font-size: 13px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: $color-primary;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, $color-border, transparent);
+    margin: 16px 0;
+  }
+
+  &__checkboxes {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
   }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: $color-text-secondary;
+    user-select: none;
+
+    input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: $color-primary;
+    }
+
+    span {
+      transition: color 0.2s ease;
+    }
+
+    &:hover span {
+      color: $color-primary;
+    }
+  }
+
+  &__reset {
+    width: 100%;
+    height: 36px;
+    border: 1px solid $color-border;
+    border-radius: 10px;
+    background: transparent;
+    color: $color-text-secondary;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+      background: rgba(15, 110, 86, 0.04);
+    }
+  }
+}
+
+.jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .job-card {
   display: flex;
-  gap: 12px;
-  padding: 16px;
-  background: $color-bg-card;
+  gap: 14px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.98);
   border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(15, 110, 86, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(15, 110, 86, 0.08);
+  }
 
   &__avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 9px;
-    background: rgba(15, 110, 86, 0.1);
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(15, 110, 86, 0.15), rgba(15, 110, 86, 0.08));
     color: $color-primary;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
+    font-weight: 700;
     flex-shrink: 0;
+    font-size: 16px;
   }
 
-  &__content {
-    flex: 1;
-  }
+  &__content { flex: 1; }
 
   &__header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   &__title {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 15px;
     margin: 0;
+    color: $color-text-primary;
+  }
+
+  &__title-link {
+    text-decoration: none;
+    flex: 1;
+  }
+
+  &__bookmark {
+    border: 1px solid $color-border;
+    background: transparent;
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    color: $color-text-secondary;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $color-primary;
+      border-color: $color-primary;
+    }
   }
 
   &__meta {
     font-size: 13px;
     color: $color-text-secondary;
-    margin: 2px 0 8px;
+    margin: 4px 0 10px;
   }
 
   &__tags {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
   }
 }
 
 .tag {
   font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
   background: rgba(15, 110, 86, 0.1);
   color: $color-primary;
+  font-weight: 500;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #ECEAE3 25%, #F5F4EF 50%, #ECEAE3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 6px;
+
+  &--avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  &--line {
+    height: 12px;
+    margin-bottom: 8px;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.job-card--skeleton {
+  pointer-events: none;
+}
+
+.state-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: $color-text-secondary;
+  font-size: 14px;
+
+  button {
+    margin-top: 12px;
+    padding: 8px 16px;
+    border: 1px solid $color-border;
+    border-radius: 10px;
+    background: $color-bg-card;
+    cursor: pointer;
+  }
 }

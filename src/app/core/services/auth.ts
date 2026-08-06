@@ -53,6 +53,10 @@ export class Auth {
     this.currentUserSubject.next(res.user);
   }
 
+  getCurrentUser(): AuthResponse['user'] | null {
+    return this.currentUserSubject.value;
+  }
+
   private getStoredUser(): AuthResponse['user'] | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;

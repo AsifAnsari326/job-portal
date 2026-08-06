@@ -1,6 +1,29 @@
 @import 'styles/variables';
 
-body {
-  background-color: $color-bg-page;
-  font-family: 'Segoe UI', sans-serif;
+:root {
+  color-scheme: light;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(15, 110, 86, 0.08), transparent 24%),
+    $color-bg-page;
+  font-family: 'Segoe UI', sans-serif;
+  color: $color-text-primary;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
