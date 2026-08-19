@@ -15,7 +15,7 @@
       <a class="header__link" routerLink="/dashboard?tab=applications" (click)="closeMenu()">Applications</a>
       <a class="header__user" routerLink="/dashboard" (click)="closeMenu()">
         <span class="header__avatar">{{ userInitial }}</span>
-        <span class="header__user-name">{{ currentUser()?.fullName }}</span>
+        <span class="header__user-name">{{ currentUser()?.fullname }}</span>
       </a>
       <button class="header__logout" type="button" (click)="logout()">Log out</button>
     } @else {

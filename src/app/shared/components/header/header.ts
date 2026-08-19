@@ -31,6 +31,6 @@ export class Header {
   }
 
   get userInitial(): string {
-    return this.currentUser()?.fullName?.charAt(0)?.toUpperCase() ?? 'U';
+    return this.currentUser()?.fullname?.charAt(0)?.toUpperCase() ?? 'U';
   }
 }

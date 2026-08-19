@@ -18,9 +18,9 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { fullName, email, password } = req.body;
+    const { fullname, email, password } = req.body;
 
-    if (!fullName || !email || !password) {
+    if (!fullname || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -42,8 +42,8 @@ module.exports = async function handler(req, res) {
 
     const { data: newUser, error } = await supabase
       .from('users')
-      .insert({ fullName, email, password: hashedPassword })
-      .select('id, fullName, email')
+      .insert({ fullname, email, password: hashedPassword })
+      .select('id, fullname, email')
       .single();
 
     if (error) {

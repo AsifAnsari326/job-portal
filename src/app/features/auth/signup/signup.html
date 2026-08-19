@@ -13,10 +13,10 @@
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div *ngIf="formErrorMessage" class="form-summary">{{ formErrorMessage }}</div>
       <div class="form-group">
-        <label class="form-label" for="fullName">Full name</label>
-        <input id="fullName" type="text" class="form-input" formControlName="fullName"
-               [class.form-input--invalid]="fullName?.invalid && fullName?.touched" />
-        <span *ngIf="fullName?.errors?.['required'] && fullName?.touched" class="form-error">Full name is required.</span>
+        <label class="form-label" for="fullname">Full name</label>
+        <input id="fullname" type="text" class="form-input" formControlName="fullname"
+               [class.form-input--invalid]="fullname?.invalid && fullname?.touched" />
+        <span *ngIf="fullname?.errors?.['required'] && fullname?.touched" class="form-error">Full name is required.</span>
       </div>
 
       <div class="form-group">

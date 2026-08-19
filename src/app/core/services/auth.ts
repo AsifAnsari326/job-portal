@@ -9,7 +9,7 @@ interface AuthResponse {
     user: {
         id: number,
         email: string,
-        fullName: string
+        fullname: string
     }
 }
 
@@ -23,8 +23,8 @@ export class Auth {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  signup(fullName: string, email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, { fullName, email, password })
+  signup(fullname: string, email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, { fullname, email, password })
       .pipe(tap(res => this.setSession(res)));
   }
 

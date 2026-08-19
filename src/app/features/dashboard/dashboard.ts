@@ -71,7 +71,7 @@ export class Dashboard {
   loadUserData(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
-      this.userName.set(user.fullName || 'User');
+      this.userName.set(user.fullname || 'User');
     }
   }
 

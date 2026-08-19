@@ -26,14 +26,14 @@ export class Signup {
 
   ngOnInit() {
     this.signupForm = this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      fullname: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: passwordsMatch });
   }
 
-  get fullName() {return this.signupForm.get('fullName')}
+  get fullname() {return this.signupForm.get('fullname')}
   get email() { return this.signupForm.get('email'); }
   get password() { return this.signupForm.get('password'); }
   get confirmPassword() { return this.signupForm.get('confirmPassword'); }
@@ -49,8 +49,8 @@ export class Signup {
       return;
     }
 
-    const { fullName, email, password } = this.signupForm.value;
-    this.authService.signup(fullName!, email!, password!).subscribe({
+    const { fullname, email, password } = this.signupForm.value;
+    this.authService.signup(fullname!, email!, password!).subscribe({
       next: () => {
         this.router.navigate(['/jobs']);
       },
