@@ -6,47 +6,43 @@ module.exports = async function handler(req, res) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_KEY;
 
-  const result = {};
-
-  // Check URL format
-  result.urlFormat = url ? (url.startsWith('https://') && url.endsWith('.supabase.co') ? 'VALID' : 'INVALID - must be like https://xxx.supabase.co') : 'MISSING';
-  result.urlLength = url ? url.length : 0;
-
-  // Check Key format
-  result.keyFormat = key ? (key.startsWith('eyJ') ? 'VALID - looks like JWT' : 'INVALID - must start with eyJ') : 'MISSING';
-  result.keyLength = key ? key.length : 0;
-
-  // Show partial values for verification
-  result.urlPreview = url ? url.substring(0, 40) : 'N/A';
-  result.keyPreview = key ? key.substring(0, 30) + '...' : 'N/A';
-
-  if (!url || !key) {
-    result.status = 'FAIL - Missing env variables';
-    return res.status(500).json(result);
-  }
-
   try {
     const supabase = createClient(url, key);
 
-    const { data, error } = await supabase
-      .from('users')
-      .select('id, email')
-      .limit(3);
+    const results = {};
 
-    if (error) {
-      result.status = 'FAIL';
-      result.error = error.message;
-      result.code = error.code;
-      result.hint = error.hint;
-      return res.status(500).json(result);
+    // Test users table
+    const { data: users, error: e1 } = await supabase.from('users').select('id, email').limit(3);
+    results.users = { ok: !e1, count: users?.length, error: e1?.message };
+
+    // Test jobs table
+    const { data: jobs, error: e2 } = await supabase.from('jobs').select('id, title').limit(3);
+    results.jobs = { ok: !e2, count: jobs?.length, error: e2?.message };
+
+    // Test companies table
+    const { data: companies, error: e3 } = await supabase.from('companies').select('id, name').limit(3);
+    results.companies = { ok: !e3, count: companies?.length, error: e3?.message };
+
+    // Test applications table
+    const { data: apps, error: e4 } = await supabase.from('applications').select('id').limit(3);
+    results.applications = { ok: !e4, count: apps?.length, error: e4?.message };
+
+    // Test signup (insert user)
+    const testEmail = 'debug-test-' + Date.now() + '@test.com';
+    const { data: newUser, error: e5 } = await supabase
+      .from('users')
+      .insert({ fullName: 'Debug User', email: testEmail, password: 'test123' })
+      .select('id')
+      .single();
+    results.signupTest = { ok: !e5, error: e5?.message, errorCode: e5?.code };
+
+    // Delete test user
+    if (newUser) {
+      await supabase.from('users').delete().eq('id', newUser.id);
     }
 
-    result.status = 'OK - Connection working!';
-    result.sampleUsers = data;
-    res.json(result);
+    res.json(results);
   } catch (err) {
-    result.status = 'FAIL - Exception';
-    result.error = err.message;
-    res.status(500).json(result);
+    res.status(500).json({ error: err.message });
   }
 };
