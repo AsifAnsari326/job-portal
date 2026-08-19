@@ -1,0 +1,52 @@
+-- ONLY RUN IF TABLES DON'T EXIST IN TABLE EDITOR
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT PRIMARY KEY,
+  fullName TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS companies (
+  id BIGINT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  location TEXT,
+  jobCount INT DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS jobs (
+  id BIGINT PRIMARY KEY,
+  title TEXT NOT NULL,
+  company TEXT NOT NULL,
+  companyId BIGINT,
+  location TEXT,
+  type TEXT,
+  experience TEXT,
+  salary TEXT,
+  tags TEXT[],
+  description TEXT,
+  postedDate TEXT
+);
+
+CREATE TABLE IF NOT EXISTS applications (
+  id BIGINT PRIMARY KEY,
+  jobId BIGINT,
+  userId BIGINT,
+  resumeLink TEXT,
+  coverNote TEXT,
+  appliedDate TEXT
+);
+
+CREATE TABLE IF NOT EXISTS savedJobs (
+  id BIGINT PRIMARY KEY,
+  jobId BIGINT,
+  userId BIGINT
+);
+
+-- Disable RLS
+ALTER TABLE users DISABLE ROW LEVEL SECURITY;
+ALTER TABLE companies DISABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE applications DISABLE ROW LEVEL SECURITY;
+ALTER TABLE savedJobs DISABLE ROW LEVEL SECURITY;
