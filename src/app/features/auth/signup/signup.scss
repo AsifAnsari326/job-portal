@@ -1,2 +1,12 @@
 @import  '../../../../styles/variables';
 @import '../login/login.scss';
+
+.form-summary {
+	background: rgba(255, 230, 230, 0.9);
+	border: 1px solid rgba(220, 60, 60, 0.12);
+	color: $color-danger;
+	padding: 8px 12px;
+	border-radius: 8px;
+	margin-bottom: 12px;
+	font-size: 13px;
+}

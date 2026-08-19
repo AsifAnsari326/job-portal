@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Auth } from '../../../core/services/auth';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
   standalone: true,
 })
 export class Login {
-  loginForm!: any;
+  loginForm!: FormGroup;
+  formErrorMessage: string = '';
 
   constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {}
 
@@ -33,10 +35,17 @@ export class Login {
   onSubmit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this.formErrorMessage = 'Please correct the highlighted fields.';
+      // focus first invalid input
+      const firstInvalid: HTMLElement | null = document.querySelector('.form-input--invalid');
+      if (firstInvalid && typeof firstInvalid.focus === 'function') {
+        firstInvalid.focus();
+      }
       return;
     }
 
     const { email, password } = this.loginForm.value;
+    this.formErrorMessage = '';
     this.authService.login(email!, password!).subscribe({
       next: () => {
         this.router.navigate(['/jobs']);

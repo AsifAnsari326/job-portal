@@ -5,14 +5,11 @@ import { SavedJobsService } from '../../core/services/saved-jobs';
 import { JobService } from '../../core/services/job';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, map, of, switchMap } from 'rxjs';
-import { RouterLink } from '@angular/router';
-
 @Component({
   selector: 'app-saved-jobs',
   standalone: true,
-  imports: [RouterLink],
   templateUrl: './saved-jobs.html',
-  styleUrl: './saved-jobs.scss',
+  styleUrls: ['./saved-jobs.scss'],
 })
 export class SavedJobsPage {
   private savedJobsService = inject(SavedJobsService);

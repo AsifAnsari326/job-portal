@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../../core/services/auth'; 
 
@@ -11,13 +12,14 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 }
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './signup.html',
-  styleUrl: './signup.scss',
+  styleUrls: ['./signup.scss'],
   standalone: true,
 })
 export class Signup {
-  signupForm!: any;
+  signupForm!: FormGroup;
+  formErrorMessage: string = '';
 
   constructor(private fb: FormBuilder, private router: Router, private authService: Auth) {}
 
@@ -39,6 +41,11 @@ export class Signup {
   onSubmit() {
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();
+      this.formErrorMessage = 'Please correct the highlighted fields.';
+      const firstInvalid: HTMLElement | null = document.querySelector('.form-input--invalid');
+      if (firstInvalid && typeof firstInvalid.focus === 'function') {
+        firstInvalid.focus();
+      }
       return;
     }
 
