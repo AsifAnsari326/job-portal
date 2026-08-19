@@ -17,23 +17,35 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) {
+      return res.status(500).json({ message: 'Database error', details: error.message });
+    }
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (!bcrypt.compareSync(password, user.password)) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const accessToken = jwt.sign({ sub: user.id, email }, SECRET, { expiresIn: '7d' });
+    const { password: _, ...userWithoutPassword } = user;
+    res.json({ accessToken, user: userWithoutPassword });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', details: err.message });
   }
-
-  const { data: user } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email)
-    .single();
-
-  if (!user || !bcrypt.compareSync(password, user.password)) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
-
-  const accessToken = jwt.sign({ sub: user.id, email }, SECRET, { expiresIn: '7d' });
-  const { password: _, ...userWithoutPassword } = user;
-  res.json({ accessToken, user: userWithoutPassword });
 };

@@ -17,34 +17,42 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { fullName, email, password } = req.body;
+  try {
+    const { fullName, email, password } = req.body;
 
-  if (!fullName || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const { data: existing, error: checkError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (checkError) {
+      return res.status(500).json({ message: 'Database error', details: checkError.message });
+    }
+
+    if (existing) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 8);
+
+    const { data: newUser, error } = await supabase
+      .from('users')
+      .insert({ fullName, email, password: hashedPassword })
+      .select('id, fullName, email')
+      .single();
+
+    if (error) {
+      return res.status(500).json({ message: 'Failed to create user', details: error.message });
+    }
+
+    const accessToken = jwt.sign({ sub: newUser.id, email }, SECRET, { expiresIn: '7d' });
+    res.status(201).json({ accessToken, user: newUser });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', details: err.message });
   }
-
-  const { data: existing } = await supabase
-    .from('users')
-    .select('id')
-    .eq('email', email)
-    .single();
-
-  if (existing) {
-    return res.status(400).json({ message: 'Email already registered' });
-  }
-
-  const hashedPassword = bcrypt.hashSync(password, 8);
-
-  const { data: newUser, error } = await supabase
-    .from('users')
-    .insert({ fullName, email, password: hashedPassword })
-    .select('id, fullName, email')
-    .single();
-
-  if (error) {
-    return res.status(500).json({ message: 'Failed to create user' });
-  }
-
-  const accessToken = jwt.sign({ sub: newUser.id, email }, SECRET, { expiresIn: '7d' });
-  res.status(201).json({ accessToken, user: newUser });
 };

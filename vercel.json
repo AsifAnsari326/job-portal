@@ -6,30 +6,6 @@
   "installCommand": "npm install",
   "rewrites": [
     {
-      "source": "/api/login",
-      "destination": "/api/login.js"
-    },
-    {
-      "source": "/api/signup",
-      "destination": "/api/signup.js"
-    },
-    {
-      "source": "/api/jobs/:id",
-      "destination": "/api/jobs/[id].js"
-    },
-    {
-      "source": "/api/jobs",
-      "destination": "/api/jobs.js"
-    },
-    {
-      "source": "/api/companies",
-      "destination": "/api/companies.js"
-    },
-    {
-      "source": "/api/applications",
-      "destination": "/api/applications.js"
-    },
-    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
