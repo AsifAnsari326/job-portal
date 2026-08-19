@@ -2,11 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Job } from '../models/job';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Service()
 export class JobService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3001/jobs';
+  private apiUrl = `${environment.apiUrl}/jobs`;
 
   getJobs(searchTerm: string = '', type: string = '', page: number = 1, limit: number = 6): Observable<Job[]> {
     let params = new HttpParams();

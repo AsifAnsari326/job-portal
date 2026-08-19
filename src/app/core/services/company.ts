@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Company {
   id: number;
@@ -12,7 +13,7 @@ export interface Company {
 
 export function CompanyService() {
   const http = inject(HttpClient);
-  const apiUrl = 'http://localhost:3001';
+  const apiUrl = environment.apiUrl;
 
   return {
     getCompanies(): Observable<Company[]> {

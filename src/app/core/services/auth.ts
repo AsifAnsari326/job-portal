@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Service } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface AuthResponse {
     accessToken: string;
@@ -16,7 +17,7 @@ interface AuthResponse {
   providedIn: 'root'
 })
 export class Auth {
- private apiUrl = 'http://localhost:3001';
+ private apiUrl = environment.apiUrl;
   private currentUserSubject = new BehaviorSubject<AuthResponse['user'] | null>(this.getStoredUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
