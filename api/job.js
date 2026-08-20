@@ -1,4 +1,4 @@
-const { supabase } = require('./_lib/supabase');
+const { supabase } = require('../_lib/supabase');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
     const id = Number(req.query.id);
 
     if (!id) {
-      return res.status(400).json({ message: 'Job ID is required', query: req.query });
+      return res.status(400).json({ message: 'Job ID is required' });
     }
 
     const { data, error } = await supabase

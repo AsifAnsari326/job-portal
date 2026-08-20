@@ -19,6 +19,6 @@ export class JobService {
   }
 
   getJobById(id: number): Observable<Job> {
-    return this.http.get<Job>(`${this.apiUrl}/${id}`);
+    return this.http.get<Job>(`${environment.apiUrl}/job`, { params: new HttpParams().set('id', id.toString()) });
   }
 }
