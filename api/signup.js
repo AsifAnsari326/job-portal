@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { supabase } = require('./_lib/supabase');
+const { supabase } = require('./lib/supabase');
 
 const SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
