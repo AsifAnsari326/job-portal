@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
     const limit = Number(_limit) || 6;
     const start = (page - 1) * limit;
 
-    query = query.range(start, start + limit - 1).order('postedDate', { ascending: false });
+    query = query.range(start, start + limit - 1);
 
     const { data, count, error } = await query;
 
