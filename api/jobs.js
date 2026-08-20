@@ -28,14 +28,14 @@ module.exports = async function handler(req, res) {
     }
 
     if (companyId) {
-      query = query.eq('companyId', Number(companyId));
+      query = query.eq('companyid', Number(companyId));
     }
 
     const page = Number(_page) || 1;
     const limit = Number(_limit) || 6;
     const start = (page - 1) * limit;
 
-    query = query.range(start, start + limit - 1);
+    query = query.range(start, start + limit - 1).order('posteddate', { ascending: false });
 
     const { data, count, error } = await query;
 

@@ -15,33 +15,33 @@ module.exports = async function handler(req, res) {
     let query = supabase.from('applications').select('*');
 
     if (userId) {
-      query = query.eq('userId', Number(userId));
+      query = query.eq('userid', Number(userId));
     }
 
     const { data, error } = await query;
 
     if (error) {
-      return res.status(500).json({ message: 'Failed to fetch applications' });
+      return res.status(500).json({ message: 'Failed to fetch applications', details: error.message });
     }
 
-    return res.json(data);
+    return res.json(data || []);
   }
 
   if (req.method === 'POST') {
     const { data, error } = await supabase
       .from('applications')
       .insert({
-        jobId: req.body.jobId,
-        userId: req.body.userId,
-        resumeLink: req.body.resumeLink,
-        coverNote: req.body.coverNote,
-        appliedDate: new Date().toISOString().split('T')[0],
+        jobid: req.body.jobId,
+        userid: req.body.userId,
+        resumelink: req.body.resumeLink,
+        covernote: req.body.coverNote,
+        applieddate: new Date().toISOString().split('T')[0],
       })
       .select()
       .single();
 
     if (error) {
-      return res.status(500).json({ message: 'Failed to create application' });
+      return res.status(500).json({ message: 'Failed to create application', details: error.message });
     }
 
     return res.status(201).json(data);
